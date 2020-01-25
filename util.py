@@ -1,7 +1,7 @@
 import os
 import matplotlib.pyplot as plt
 import nltk
-nltk.download('punkt')
+# nltk.download('punkt')
 import numpy as np
 
 from collections import Counter

@@ -6,9 +6,14 @@
 import argparse
 import util
 
+import sys
 
 def main(args):
     tokenizer = util.Tokenizer(tokenize_type=args.tok, lowercase=True)
+    if args.log is not None:
+        log = open(args.log, "w+")
+        sys.stdout = log
+        sys.stderr = log
 
     # TODO: you have to pass this test.
     util.test_ngram_counts(tokenizer)
@@ -77,5 +82,7 @@ if __name__ == '__main__':
                         help='unknown token symbol [%(default)s]')
     parser.add_argument('--quiet', action='store_true',
                         help='skip printing n-grams?')
+    parser.add_argument('--log', type=str, default=None,
+                        help='log file')
     args = parser.parse_args()
     main(args)
