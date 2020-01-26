@@ -54,6 +54,10 @@ class BigramLanguageModel:
 
     def compute_bigram_prob_laplace(self, alpha):
         # TODO: Implement here
+        self.bi_prob = self.bi_counts.copy()
+        for i, _ in enumerate(self.bi_prob):
+            cnt = np.sum(self.bi_prob[i])
+            self.bi_prob[i] = (self.bi_prob[i] + alpha) / (cnt + alpha * self.n)
 
         # Do not remove the following normalization check.
         for i in range(self.bi_prob.shape[0]):
@@ -61,6 +65,16 @@ class BigramLanguageModel:
 
     def compute_bigram_prob_interpolation(self, beta, alpha):
         # TODO: Implement here
+        self.bi_prob = self.bi_counts.copy()
+        uni_counts = np.zeros(len(self.bi_prob.T))
+        for i, _ in enumerate(self.bi_prob.T):
+            uni_counts[i] = np.sum(self.bi_prob.T[i])
+        cnt_uni=np.sum(uni_counts)
+        for i, _ in enumerate(self.bi_prob):
+            cnt = np.sum(self.bi_prob[i])
+            laplace_bi = (self.bi_prob[i] + alpha) / (cnt + alpha * self.n)
+            laplace = (uni_counts + alpha) / (cnt_uni + alpha * self.n)
+            self.bi_prob[i] = beta * laplace_bi + (1-beta) * laplace
 
         # Do not remove the following normalization check.
         for i in range(self.bi_prob.shape[0]):
